@@ -367,7 +367,7 @@ class PC:
 # bot.make_move()
 
 # =====================================================================
-# 2. PYGAME and GUI Implementation  THIS PART WAS BUILT BY AI !!!
+# 2. PYGAME and GUI Implementation , THIS PART WAS BUILT BY AI !!!
 # =====================================================================
 
 class QuoridorGUI:
@@ -376,46 +376,44 @@ class QuoridorGUI:
         pygame.display.set_caption("Quoridor AI Engine")
         self.game_over = False
         
-        # Ekran Çözünürlüğü
+
         self.SCREEN_WIDTH = 1240
         self.SCREEN_HEIGHT = 880
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
-        # Boyut Tanımları (İstediğin Geometrik Orantılar)
+
         self.TILE_SIZE = 68       # 0 olan zemin karelerinin boyutu
         self.WALL_THICK = 16      # Duvar ve çapa kalınlığı
         self.GOAL_HEIGHT = 30     # 0. ve 16. hedef satırlarının yüksekliği
         self.OFFSET_X = 50
         self.OFFSET_Y = 50
 
-        # Renk Paleti (Koyu Modern / Ahşap Teması)
+
         self.BG_COLOR = (24, 26, 32)
         self.BOARD_BG = (15, 16, 20)
         self.TILE_COLOR = (42, 46, 58)
         self.TILE_HOVER = (60, 66, 84)
         self.GROOVE_COLOR = (28, 30, 38)
         
-        # Duvar ve Çapa Renkleri
+
         self.ANCHOR_COLOR = (48, 52, 65)
         self.ANCHOR_HOVER = (245, 158, 11)      # Turuncu vurgu
         self.ANCHOR_SELECTED = (239, 68, 68)   # Kırmızı seçim
         self.WALL_PLACED = (245, 158, 11)       # Yerleştirilmiş duvar
 
-        # Hedef Çizgileri
         self.GOAL_PC = (59, 130, 246, 120)     # Mavi
         self.GOAL_PLAYER = (16, 185, 129, 120) # Yeşil
 
-        # Piyon Renkleri
+
         self.PLAYER_COLOR = (16, 185, 129)     # Zümrüt Yeşili (Player)
         self.PC_COLOR = (59, 130, 246)         # Safir Mavisi (PC)
 
-        # Yazı Tipleri
         self.font_title = pygame.font.SysFont("Segoe UI, Arial", 26, bold=True)
         self.font_body = pygame.font.SysFont("Segoe UI, Arial", 18)
         self.font_small = pygame.font.SysFont("Segoe UI, Arial", 14)
 
-        # Tahta ve Bot Kurulumu
+
         self.board_obj = Board()
         self.board = self.board_obj.initialize_board()
         self.bot = PC(
@@ -426,15 +424,14 @@ class QuoridorGUI:
             player_walls=10
         )
 
-        # Oyun Durumu
+
         self.current_turn = "PLAYER"  # "PLAYER" veya "PC"
         self.mode = "MOVE"            # "MOVE" veya "WALL"
         self.selected_anchor = None   # (y, x)
         self.status_message = "Your turn. Press 'M' for Move, 'O' for Wall."
 
     def get_cell_rect(self, r, c):
-        """17x17 matrisindeki (r, c) hücresinin piksel Rect'ini hesaplar."""
-        # X Hesabı
+
         x = self.OFFSET_X
         for col_idx in range(c):
             if col_idx % 2 == 0:
@@ -452,7 +449,7 @@ class QuoridorGUI:
             else:
                 y += self.WALL_THICK
 
-        # Genişlik ve Yükseklik
+
         w = self.TILE_SIZE if (c % 2 == 0) else self.WALL_THICK
         if r == 0 or r == 16:
             h = self.GOAL_HEIGHT
@@ -467,13 +464,13 @@ class QuoridorGUI:
         total_h = 2 * self.GOAL_HEIGHT + 8 * self.TILE_SIZE + 7 * self.WALL_THICK
         pygame.draw.rect(self.screen, self.BOARD_BG, (self.OFFSET_X - 10, self.OFFSET_Y - 10, total_w + 20, total_h + 20), border_radius=12)
 
-        # 17x17 Hücreleri Çiz
+
         for r in range(17):
             for c in range(17):
                 rect = self.get_cell_rect(r, c)
                 val = self.board[r][c]
 
-                # 1. Zemin Kareleri (0)
+
                 if r % 2 == 1 and c % 2 == 0:
                     color = self.TILE_COLOR
                     if self.mode == "MOVE" and self.current_turn == "PLAYER":
@@ -481,13 +478,13 @@ class QuoridorGUI:
                             color = self.TILE_HOVER
                     pygame.draw.rect(self.screen, color, rect, border_radius=6)
 
-                # 2. Hedef Çizgileri (0. ve 16. satır)
+
                 elif r == 0 and c % 2 == 0:
                     pygame.draw.rect(self.screen, (30, 41, 59), rect, border_radius=4)
                 elif r == 16 and c % 2 == 0:
                     pygame.draw.rect(self.screen, (20, 48, 40), rect, border_radius=4)
 
-                # 3. Çapalar (Kesişim Kareleri - Çift Satır, Tek Sütun)
+
                 elif r % 2 == 0 and c % 2 == 1 and 2 <= r <= 14:
                     color = self.ANCHOR_COLOR
                     if self.selected_anchor == (r, c):
@@ -499,12 +496,12 @@ class QuoridorGUI:
                         color = self.WALL_PLACED
                     pygame.draw.rect(self.screen, color, rect, border_radius=3)
 
-                # 4. Duvar Boşlukları (Yatay veya Dikey Dikdörtgenler)
+
                 elif val == 1 or val == 2:
                     color = self.WALL_PLACED if val == 2 else self.GROOVE_COLOR
                     pygame.draw.rect(self.screen, color, rect, border_radius=2)
 
-                # 5. Piyonları Çiz
+
                 if val == 6:  # Player
                     center = rect.center
                     pygame.draw.circle(self.screen, (10, 80, 50), center, self.TILE_SIZE // 2 - 6)
@@ -518,43 +515,43 @@ class QuoridorGUI:
         panel_x = 880
         panel_y = 50
 
-        # Başlık
+
         title = self.font_title.render("QUORIDOR ENGINE", True, (240, 240, 245))
         self.screen.blit(title, (panel_x, panel_y))
 
-        # Sıra Göstergesi
+
         turn_text = f"Turn: {'YOU (Player)' if self.current_turn == 'PLAYER' else 'PC (Thinking...)'}"
         turn_col = self.PLAYER_COLOR if self.current_turn == 'PLAYER' else self.PC_COLOR
         turn_surf = self.font_body.render(turn_text, True, turn_col)
         self.screen.blit(turn_surf, (panel_x, panel_y + 50))
 
-        # Mod Göstergesi
+
         mode_box = pygame.Rect(panel_x, panel_y + 90, 310, 45)
         pygame.draw.rect(self.screen, (32, 35, 45), mode_box, border_radius=8)
         mode_label = f"CURRENT MODE:  {self.mode}"
         mode_col = (245, 158, 11) if self.mode == "WALL" else (16, 185, 129)
         self.screen.blit(self.font_body.render(mode_label, True, mode_col), (panel_x + 15, panel_y + 102))
 
-        # Duvar Durumu
+
         p_walls = self.font_body.render(f"Your Walls: {self.bot.player_walls} / 10", True, (220, 220, 230))
         pc_walls = self.font_body.render(f"PC Walls:   {self.bot.pc_walls} / 10", True, (220, 220, 230))
         self.screen.blit(p_walls, (panel_x, panel_y + 160))
         self.screen.blit(pc_walls, (panel_x, panel_y + 190))
 
-        # Seçili Çapa Durumu
+
         anchor_str = f"Selected Anchor: {self.selected_anchor if self.selected_anchor else 'None'}"
         self.screen.blit(self.font_body.render(anchor_str, True, (200, 200, 210)), (panel_x, panel_y + 240))
         if self.selected_anchor:
             hint = self.font_small.render("Press 'H' for Horizontal, 'V' for Vertical", True, (245, 158, 11))
             self.screen.blit(hint, (panel_x, panel_y + 270))
 
-        # Bilgi / Hakem Mesajı
+
         status_box = pygame.Rect(panel_x, panel_y + 310, 310, 60)
         pygame.draw.rect(self.screen, (32, 35, 45), status_box, border_radius=8)
         status_surf = self.font_small.render(self.status_message, True, (180, 190, 205))
         self.screen.blit(status_surf, (panel_x + 10, panel_y + 330))
 
-        # Tuş Rehberi (Controls Cheat Sheet)
+
         guide_y = panel_y + 420
         self.screen.blit(self.font_title.render("CONTROLS", True, (160, 170, 185)), (panel_x, guide_y))
         
@@ -570,22 +567,22 @@ class QuoridorGUI:
             self.screen.blit(txt, (panel_x, guide_y + 40 + idx * 26))
 
     def handle_player_move(self, target_r, target_c):
-        """Oyuncunun komşu kareye yürüme kontrolü."""
+
         pr, pc = self.bot.current_player_position
         dr = target_r - pr
         dc = target_c - pc
 
-        # 2 birimlik mesafe (arada duvar boşluğu var)
+
         if (abs(dr) == 2 and dc == 0) or (abs(dc) == 2 and dr == 0):
             wall_r = pr + dr // 2
             wall_c = pc + dc // 2
 
-            # Arada duvar var mı kontrolü
+
             if self.board[wall_r][wall_c] == 2:
                 self.status_message = "Blocked! A wall is in the way."
                 return False
 
-            # Tahtayı güncelle
+
             self.board[pr][pc] = 0
             self.board[target_r][target_c] = 6
             self.bot.current_player_position = (target_r, target_c)
@@ -596,7 +593,7 @@ class QuoridorGUI:
         return False
 
     def handle_player_wall(self, orientation):
-        """Oyuncunun seçtiği çapaya duvar koyma işlemi."""
+
         if not self.selected_anchor:
             self.status_message = "Select an anchor square first!"
             return False
@@ -613,12 +610,12 @@ class QuoridorGUI:
                     self.status_message = "Cannot place wall: Space is occupied!"
                     return False
 
-                # 2. Duvarı geçici olarak yerleştir
+
                 self.board[y][x] = 2
                 self.board[y][x - 1] = 2
                 self.board[y][x + 1] = 2
 
-                # 3. Yol kontrolü (Dijkstra)
+
                 route_player = self.bot.virtual_djikstra(self.bot.current_player_position, target_value=4)
                 route_pc = self.bot.virtual_djikstra(self.bot.current_position, target_value=3)
 
@@ -632,7 +629,7 @@ class QuoridorGUI:
                     self.status_message = "Illegal wall! It blocks the path to the goal."
                     return False
 
-                # Geçerli hamle: Duvarı onayla
+
                 self.bot.player_walls -= 1
                 self.selected_anchor = None
                 self.status_message = f"Placed horizontal wall at {(y, x)}"
@@ -696,7 +693,7 @@ class QuoridorGUI:
                     elif event.key == pygame.K_ESCAPE:
                         self.selected_anchor = None
 
-                    # Duvar Yön Tuşları
+
                     elif self.mode == "WALL" and self.current_turn == "PLAYER":
                         if event.key == pygame.K_h:
                             if self.handle_player_wall("h"):
@@ -719,19 +716,19 @@ class QuoridorGUI:
                                         self.selected_anchor = (r, c)
                                         self.status_message = f"Anchor {(r, c)} selected. Press H or V."
 
-            # Ekrana Çizim
+
             self.screen.fill(self.BG_COLOR)
             self.draw_board(mouse_pos)
             self.draw_hud()
             pygame.display.flip()
 
-            # PC Hamlesi (Sıra PC'ye geçtiğinde çalışır)
+
             if self.current_turn == "PC":
-                pygame.time.wait(300)  # İnsan gözünün takip edebileceği kısa bir gecikme
+                pygame.time.wait(300)  
                 self.bot.make_move()
                 self.current_turn = "PLAYER"
                 self.status_message = "Your turn."
-                self.check_win()  # <--- PC yürüdükten sonra kazanıp kazanmadığına bak
+                self.check_win()  
 
             self.clock.tick(60)
 
