@@ -383,9 +383,9 @@ class QuoridorGUI:
         self.clock = pygame.time.Clock()
 
 
-        self.TILE_SIZE = 68       # 0 olan zemin karelerinin boyutu
-        self.WALL_THICK = 16      # Duvar ve çapa kalınlığı
-        self.GOAL_HEIGHT = 30     # 0. ve 16. hedef satırlarının yüksekliği
+        self.TILE_SIZE = 68       
+        self.WALL_THICK = 16    
+        self.GOAL_HEIGHT = 30     
         self.OFFSET_X = 50
         self.OFFSET_Y = 50
 
@@ -398,16 +398,16 @@ class QuoridorGUI:
         
 
         self.ANCHOR_COLOR = (48, 52, 65)
-        self.ANCHOR_HOVER = (245, 158, 11)      # Turuncu vurgu
-        self.ANCHOR_SELECTED = (239, 68, 68)   # Kırmızı seçim
-        self.WALL_PLACED = (245, 158, 11)       # Yerleştirilmiş duvar
+        self.ANCHOR_HOVER = (245, 158, 11)      
+        self.ANCHOR_SELECTED = (239, 68, 68)   
+        self.WALL_PLACED = (245, 158, 11)      
 
-        self.GOAL_PC = (59, 130, 246, 120)     # Mavi
-        self.GOAL_PLAYER = (16, 185, 129, 120) # Yeşil
+        self.GOAL_PC = (59, 130, 246, 120)    
+        self.GOAL_PLAYER = (16, 185, 129, 120)
 
 
-        self.PLAYER_COLOR = (16, 185, 129)     # Zümrüt Yeşili (Player)
-        self.PC_COLOR = (59, 130, 246)         # Safir Mavisi (PC)
+        self.PLAYER_COLOR = (16, 185, 129)     
+        self.PC_COLOR = (59, 130, 246)         
 
         self.font_title = pygame.font.SysFont("Segoe UI, Arial", 26, bold=True)
         self.font_body = pygame.font.SysFont("Segoe UI, Arial", 18)
@@ -459,7 +459,7 @@ class QuoridorGUI:
         return pygame.Rect(x, y, w, h)
 
     def draw_board(self, mouse_pos):
-        # Arka plan çerçevesi
+
         total_w = 9 * self.TILE_SIZE + 8 * self.WALL_THICK
         total_h = 2 * self.GOAL_HEIGHT + 8 * self.TILE_SIZE + 7 * self.WALL_THICK
         pygame.draw.rect(self.screen, self.BOARD_BG, (self.OFFSET_X - 10, self.OFFSET_Y - 10, total_w + 20, total_h + 20), border_radius=12)
@@ -605,7 +605,7 @@ class QuoridorGUI:
 
         if orientation == "h":
             if 0 <= x - 1 and x + 1 < 17:
-                # 1. Alan kontrolü: Seçilen yer boş mu?
+
                 if not (self.board[y][x] == 1 and self.board[y][x - 1] == 1 and self.board[y][x + 1] == 1):
                     self.status_message = "Cannot place wall: Space is occupied!"
                     return False
@@ -622,7 +622,7 @@ class QuoridorGUI:
                 print(f"DEBUG: route_player len = {len(route_player)}, route_pc len = {len(route_pc)}")
 
                 if not route_player or not route_pc:
-                    # Yolu kapattığı için geri al
+
                     self.board[y][x] = 1
                     self.board[y][x - 1] = 1
                     self.board[y][x + 1] = 1
@@ -704,7 +704,7 @@ class QuoridorGUI:
 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     if self.current_turn == "PLAYER":
-                        # Tıklanan hücreyi bul
+
                         for r in range(17):
                             for c in range(17):
                                 rect = self.get_cell_rect(r, c)
